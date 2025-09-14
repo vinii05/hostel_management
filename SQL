@@ -1,0 +1,54 @@
+USE hostelmanagement;
+SELECT * FROM student_room_fee_view;
+
+USE hostelmanagement;
+CREATE VIEW student_room_fee_view AS
+SELECT 
+    s.student_id,
+    s.name AS student_name,
+    s.email,
+    s.phone,
+    s.gender,
+    s.course,
+    r.room_number,
+    r.capacity,
+    a.allocation_date,
+    f.amount AS fee_amount,
+    f.status AS fee_status,
+    f.due_date
+FROM students s
+LEFT JOIN allocations a ON s.student_id = a.student_id
+LEFT JOIN rooms r ON a.room_id = r.room_id
+LEFT JOIN fees f ON s.student_id = f.student_id;
+
+
+USE hostelmanagement;
+CREATE TABLE rooms (
+    room_id INT AUTO_INCREMENT PRIMARY KEY,
+    room_number VARCHAR(10),
+    capacity INT
+);
+
+CREATE TABLE students (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    email VARCHAR(100),
+    phone VARCHAR(20),
+    gender VARCHAR(10),
+    course VARCHAR(100)
+);
+
+CREATE TABLE allocations (
+    allocation_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    room_id INT,
+    allocation_date DATE
+);
+
+CREATE TABLE fees (
+    fee_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    amount DECIMAL(10,2),
+    status VARCHAR(50),
+    due_date DATE
+);
